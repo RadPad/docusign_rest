@@ -848,6 +848,36 @@ module DocusignRest
       JSON.parse(response.body)
     end
 
+    # Public returns the URL for embedded signing
+    #
+    # envelope_id - the ID of the envelope you wish to use for embedded signing
+    # name        - the name of the signer
+    # email       - the email of the recipient
+    # return_url  - the URL you want the user to be directed to after he or she
+    #               completes the document signing
+    # headers     - optional hash of headers to merge into the existing
+    #               required headers for a multipart request.
+    #
+    # Returns the URL string for embedded signing (can be put in an iFrame)
+    def get_sender_view(options={})
+      content_type = { 'Content-Type' => 'application/json' }
+      content_type.merge(options[:headers]) if options[:headers]
+
+      post_body = {
+        returnUrl:            options[:return_url],
+      }.to_json
+
+      uri = build_uri("/accounts/#{acct_id}/envelopes/#{options[:envelope_id]}/views/sender")
+
+      http = initialize_net_http_ssl(uri)
+
+      request = Net::HTTP::Post.new(uri.request_uri, headers(content_type))
+      request.body = post_body
+
+      response = http.request(request)
+      JSON.parse(response.body)
+    end
+
 
     # Public returns the URL for embedded console
     #
