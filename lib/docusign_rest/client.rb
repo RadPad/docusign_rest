@@ -1437,7 +1437,7 @@ module DocusignRest
       uri = build_uri("/accounts/#{@acct_id}/envelopes/#{options[:envelope_id]}/recipients/#{options[:recipient_id]}/tabs")
       put_body = options[:tabs].to_json
 
-      http = @client.initialize_net_http_ssl(uri)
+      http = initialize_net_http_ssl(uri)
       request = Net::HTTP::Put.new(uri.request_uri, headers(content_type))
       request.body = put_body
 
