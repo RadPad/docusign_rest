@@ -1430,12 +1430,40 @@ module DocusignRest
       JSON.parse(response.body)
     end
 
+    def remove_recipient(options={})
+      content_type = {'Content-Type' => 'application/json'}
+      content_type.merge(options[:headers]) if options[:headers]
+
+      uri = build_uri("/accounts/#{@acct_id}/envelopes/#{options[:envelope_id]}/recipients/#{options[:recipient_id]}")
+
+      http = initialize_net_http_ssl(uri)
+      request = Net::HTTP::Delete.new(uri.request_uri, headers(content_type))
+
+      response = http.request(request)
+      JSON.parse(response.body)
+    end
+
+    def add_recipient(options={})
+      content_type = {'Content-Type' => 'application/json'}
+      content_type.merge(options[:headers]) if options[:headers]
+
+      uri = build_uri("/accounts/#{@acct_id}/envelopes/#{options[:envelope_id]}/recipients")
+      post_body = options.to_json
+
+      http = initialize_net_http_ssl(uri)
+      request = Net::HTTP::Post.new(uri.request_uri, headers(content_type))
+      request.body = post_body
+
+      response = http.request(request)
+      JSON.parse(response.body)
+    end
+
     def edit_envelope_recipient(options={})
       content_type = {'Content-Type' => 'application/json'}
       content_type.merge(options[:headers]) if options[:headers]
 
       uri = build_uri("/accounts/#{@acct_id}/envelopes/#{options[:envelope_id]}/recipients")
-      put_body = options[:tabs].to_json
+      put_body = options.to_json
 
       http = initialize_net_http_ssl(uri)
       request = Net::HTTP::Put.new(uri.request_uri, headers(content_type))
