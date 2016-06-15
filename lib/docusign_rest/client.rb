@@ -1421,7 +1421,7 @@ module DocusignRest
       content_type.merge(options[:headers]) if options[:headers]
 
       uri = build_uri("/accounts/#{@acct_id}/envelopes/#{options[:envelope_id]}/recipients/#{options[:recipient_id]}")
-      put_body = options[:tabs].to_json
+      put_body = options[:recipient_info].to_json
 
       http = initialize_net_http_ssl(uri)
       request = Net::HTTP::Put.new(uri.request_uri, headers(content_type))
