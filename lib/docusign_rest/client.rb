@@ -1415,6 +1415,22 @@ module DocusignRest
     # to the envelope and the envelope ID. Failed operations on array elements
     # will add the "errorDetails" structure containing an error code and message.
     # If "errorDetails" is null, then the operation was successful for that item.
+
+    def edit_recipient(options={})
+      content_type = {'Content-Type' => 'application/json'}
+      content_type.merge(options[:headers]) if options[:headers]
+
+      uri = build_uri("/accounts/#{@acct_id}/envelopes/#{options[:envelope_id]}/recipients/#{options[:recipient_id]}")
+      put_body = options[:tabs].to_json
+
+      http = initialize_net_http_ssl(uri)
+      request = Net::HTTP::Put.new(uri.request_uri, headers(content_type))
+      request.body = put_body
+
+      response = http.request(request)
+      JSON.parse(response.body)
+    end
+
     def add_recipient_tabs(options={})
       content_type = {'Content-Type' => 'application/json'}
       content_type.merge(options[:headers]) if options[:headers]
