@@ -1420,8 +1420,8 @@ module DocusignRest
       content_type = {'Content-Type' => 'application/json'}
       content_type.merge(options[:headers]) if options[:headers]
 
-      uri = build_uri("/accounts/#{@acct_id}/envelopes/#{options[:envelope_id]}/recipients/#{options[:recipient_id]}")
-      put_body = options[:recipient_info].to_json
+      uri = build_uri("/accounts/#{@acct_id}/envelopes/#{options[:envelope_id]}/recipients")
+      put_body = options[:envelope_info].to_json
 
       http = initialize_net_http_ssl(uri)
       request = Net::HTTP::Put.new(uri.request_uri, headers(content_type))
